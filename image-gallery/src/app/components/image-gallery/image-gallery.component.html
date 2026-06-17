@@ -1,0 +1,7 @@
+<div class="gallery-container">
+  <div class="gallery-grid">
+    @for (image of images(); track image.id) {
+      <app-image-item [image]="image"></app-image-item>
+    }
+  </div>
+</div>
