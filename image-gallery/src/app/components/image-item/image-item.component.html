@@ -1,0 +1,13 @@
+<div class="image-item" [class.destacada]="image().destacada">
+  <div class="image-wrapper">
+    @if (image().destacada) {
+      <div class="badge-destacada">⭐ Destacada</div>
+    }
+    <img [src]="image().src" [alt]="image().titulo" />
+  </div>
+  <div class="image-info">
+    <h3>{{ image().titulo }}</h3>
+    <p class="description">{{ image().descripcion }}</p>
+    <span class="category">{{ image().categoria }}</span>
+  </div>
+</div>
