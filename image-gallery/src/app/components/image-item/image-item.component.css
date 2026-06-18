@@ -32,12 +32,17 @@
     --p-button-danger-hover-bg: #dc2626;
   }
 
-  .p-button-text {
-    padding: 0.5rem 1rem;
+  .delete-btn {
+    border-radius: 0.5rem;
+    font-weight: 600;
+    transition: all 0.2s ease-out;
   }
 
-  .p-button-text:hover {
-    background-color: rgba(239, 68, 68, 0.1);
+  .delete-btn:hover {
+    background-color: #ef4444 !important;
+    color: #fff !important;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 10px rgba(239, 68, 68, 0.35);
   }
 }
 
