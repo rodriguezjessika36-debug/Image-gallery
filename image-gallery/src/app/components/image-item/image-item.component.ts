@@ -9,4 +9,5 @@ import { Image } from '../../interfaces/image.interface';
 })
 export class ImageItemComponent {
   image = input.required<Image>();
+  destacada = input<boolean>(false);
 }
