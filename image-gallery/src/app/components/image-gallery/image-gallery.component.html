@@ -1,13 +1,21 @@
-<div class="w-full">
-  <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4 md:gap-6 auto-rows-max">
+<div class="gallery-container">
+  <div class="gallery-grid w-full grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4 md:gap-6 auto-rows-max">
     @for (image of images(); let idx = $index; track image.id) {
       @if (idx === 0) {
-        <div class="col-span-2 row-span-2 sm:col-span-2">
-          <app-image-item [image]="image" [destacada]="true"></app-image-item>
+        <div class="col-span-1 md:col-span-2 md:row-span-2">
+          <app-image-item 
+            [image]="image"
+            [destacada]="true"
+            (deleteImage)="onDeleteImage($event)"
+          ></app-image-item>
         </div>
       } @else {
-        <div>
-          <app-image-item [image]="image" [destacada]="false"></app-image-item>
+        <div class="col-span-1">
+          <app-image-item 
+            [image]="image"
+            [destacada]="false"
+            (deleteImage)="onDeleteImage($event)"
+          ></app-image-item>
         </div>
       }
     }
