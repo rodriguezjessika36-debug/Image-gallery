@@ -12,6 +12,7 @@ import { CdkDropList, CdkDrag, CdkDragDrop, moveItemInArray } from '@angular/cdk
 })
 export class ImageGalleryComponent implements OnInit {
   images = signal<Image[]>([]);
+  selectedIds = signal<Set<number>>(new Set());
 
   ngOnInit() {
     this.images.set(IMAGES.filter(img => !img.borrado));
@@ -21,6 +22,14 @@ export class ImageGalleryComponent implements OnInit {
     this.images.update(currentImages =>
       currentImages.filter(img => img.id !== imageId)
     );
+  }
+
+  onToggleSelect(id: number): void {
+    this.selectedIds.update(current => {
+      const next = new Set(current);
+      next.has(id) ? next.delete(id) : next.add(id);
+      return next;
+    });
   }
 
   onDrop(event: CdkDragDrop<Image[]>): void {

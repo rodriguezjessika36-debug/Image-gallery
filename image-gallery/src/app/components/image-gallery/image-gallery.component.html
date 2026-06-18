@@ -11,7 +11,9 @@
           <app-image-item
             [image]="image"
             [destacada]="true"
+            [selected]="selectedIds().has(image.id)"
             (deleteImage)="onDeleteImage($event)"
+            (toggleSelect)="onToggleSelect($event)"
           ></app-image-item>
         </div>
       } @else {
@@ -19,7 +21,9 @@
           <app-image-item
             [image]="image"
             [destacada]="false"
+            [selected]="selectedIds().has(image.id)"
             (deleteImage)="onDeleteImage($event)"
+            (toggleSelect)="onToggleSelect($event)"
           ></app-image-item>
         </div>
       }
