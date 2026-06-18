@@ -15,6 +15,12 @@ export class ImageGalleryComponent implements OnInit {
   ngOnInit() {
     this.images.set(IMAGES.filter(img => !img.borrado));
   }
+
+  onDeleteImage(imageId: number): void {
+    this.images.update(currentImages => 
+      currentImages.filter(img => img.id !== imageId)
+    );
+  }
 }
 
 

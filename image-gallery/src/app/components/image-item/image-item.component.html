@@ -1,13 +1,43 @@
-<div class="image-item" [class.destacada]="image().destacada">
-  <div class="image-wrapper">
-    @if (image().destacada) {
-      <div class="badge-destacada">⭐ Destacada</div>
-    }
-    <img [src]="image().src" [alt]="image().titulo" />
+<p-card 
+  [ngClass]="{ 'destacada': destacada() }"
+  class="h-full transition-all duration-300 ease-out"
+>
+  <ng-template pTemplate="header">
+    <div class="relative overflow-hidden bg-gray-200">
+      @if (destacada()) {
+        <div class="absolute top-3 right-3 z-10 bg-gradient-to-r from-yellow-400 to-yellow-300 text-gray-900 px-3 py-1 rounded-full text-xs font-bold shadow-lg">
+          ⭐ Destacada
+        </div>
+      }
+      <img 
+        [src]="image().src" 
+        [alt]="image().titulo + ' - ' + image().descripcion"
+        class="w-full object-cover transition-transform duration-300 hover:scale-105"
+        [class]="destacada() ? 'h-80' : 'h-48'"
+      />
+    </div>
+  </ng-template>
+
+  <div class="flex flex-col gap-4 ">
+    <div>
+      <h5 class="text-base font-semibold text-gray-900 mb-2">{{ image().titulo }}</h5>
+      <p class="text-sm text-gray-600 mb-3">{{ image().descripcion }}</p>
+      <p-tag 
+        [value]="image().categoria"
+        [severity]="destacada() ? 'warn' : 'secondary'"
+      ></p-tag>
+    </div>
+    
+    <div class="pt-2 border-t bg-[#cdabab]">
+      <p-button 
+        icon="pi pi-trash"
+        severity="danger"
+        label="Eliminar"
+        (click)="onDeleteClick($event)"
+        pTooltip="Eliminar imagen"
+        tooltipPosition="top"
+        class="w-full text-white"
+      ></p-button>
+    </div>
   </div>
-  <div class="image-info">
-    <h3>{{ image().titulo }}</h3>
-    <p class="description">{{ image().descripcion }}</p>
-    <span class="category">{{ image().categoria }}</span>
-  </div>
-</div>
+</p-card>
