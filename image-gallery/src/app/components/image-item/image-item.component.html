@@ -28,15 +28,16 @@
       ></p-tag>
     </div>
     
-    <div class="pt-2 border-t bg-[#cdabab]">
-      <p-button 
+    <div class="pt-3 border-t bg-[#cdabab]">
+      <p-button
         icon="pi pi-trash"
+        [outlined]="true"
         severity="danger"
         label="Eliminar"
         (click)="onDeleteClick($event)"
         pTooltip="Eliminar imagen"
         tooltipPosition="top"
-        class="w-full text-white"
+        styleClass="w-full delete-btn"
       ></p-button>
     </div>
   </div>
