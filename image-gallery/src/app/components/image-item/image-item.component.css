@@ -23,6 +23,11 @@
                 0 0 20px rgba(250, 204, 21, 0.3) !important;
   }
 
+  .p-card.selected {
+    border: 2px solid rgb(37, 99, 235) !important;
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.3) !important;
+  }
+
   .p-tag {
     width: fit-content;
   }

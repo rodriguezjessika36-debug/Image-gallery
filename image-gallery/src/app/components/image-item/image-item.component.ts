@@ -16,7 +16,9 @@ import { TooltipModule } from 'primeng/tooltip';
 export class ImageItemComponent {
   image = input.required<Image>();
   destacada = input<boolean>(false);
+  selected = input<boolean>(false);
   deleteImage = output<number>();
+  toggleSelect = output<number>();
 
   onDeleteClick(event: Event): void {
     event.stopPropagation();
@@ -24,5 +26,10 @@ export class ImageItemComponent {
     if (confirmDelete) {
       this.deleteImage.emit(this.image().id);
     }
+  }
+
+  onToggleSelect(event: Event): void {
+    event.stopPropagation();
+    this.toggleSelect.emit(this.image().id);
   }
 }
