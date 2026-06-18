@@ -5,7 +5,6 @@ export interface Image {
   src: string;
   borrado: boolean;
   categoria: string;
-  destacada: boolean;
 }
 
 export const IMAGES: Image[] = [
@@ -15,8 +14,7 @@ export const IMAGES: Image[] = [
     descripcion: 'Imagen de aurora',
     src: '/images/aurora.png',
     borrado: false,
-    categoria: 'naturaleza',
-    destacada: true
+    categoria: 'naturaleza'
   },
   {
     id: 2,
@@ -24,8 +22,7 @@ export const IMAGES: Image[] = [
     descripcion: 'Imagen de japón',
     src: '/images/japon.png',
     borrado: false,
-    categoria: 'viajes',
-    destacada: false
+    categoria: 'viajes'
   },
   {
     id: 3,
@@ -33,8 +30,7 @@ export const IMAGES: Image[] = [
     descripcion: 'Imagen de lago',
     src: '/images/lago.png',
     borrado: false,
-    categoria: 'naturaleza',
-    destacada: false
+    categoria: 'naturaleza'
   },
   {
     id: 4,
@@ -42,8 +38,7 @@ export const IMAGES: Image[] = [
     descripcion: 'Imagen de playa',
     src: '/images/playa.png',
     borrado: false,
-    categoria: 'playas',
-    destacada: false
+    categoria: 'playas'
   },
   {
     id: 5,
@@ -51,8 +46,7 @@ export const IMAGES: Image[] = [
     descripcion: 'Imagen de prado',
     src: '/images/prado.png',
     borrado: false,
-    categoria: 'naturaleza',
-    destacada: false
+    categoria: 'naturaleza'
   },
   {
     id: 6,
@@ -60,7 +54,6 @@ export const IMAGES: Image[] = [
     descripcion: 'Imagen de santorini',
     src: '/images/santorini.png',
     borrado: false,
-    categoria: 'viajes',
-    destacada: true
+    categoria: 'viajes'
   }
 ];
