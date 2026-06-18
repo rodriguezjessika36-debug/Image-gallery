@@ -1,4 +1,15 @@
 <div class="gallery-container">
+  @if (selectedIds().size > 0) {
+    <div class="batch-bar sticky top-0 z-30 flex items-center justify-between gap-4 bg-blue-600 text-white rounded-lg px-4 py-3 mb-4 shadow-lg">
+      <span class="font-medium">{{ selectedIds().size }} imagen(es) seleccionada(s)</span>
+      <p-button
+        icon="pi pi-trash"
+        severity="danger"
+        label="Eliminar seleccionadas"
+        (click)="onDeleteSelected()"
+      ></p-button>
+    </div>
+  }
   <div
     class="gallery-grid w-full grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4 md:gap-6 auto-rows-max"
     cdkDropList
