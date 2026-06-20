@@ -1,1 +1,63 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';\nimport { ImageGalleryComponent } from './image-gallery.component';\nimport { Image, IMAGES } from '../../interfaces/image.interface';\n\ndescribe('ImageGalleryComponent', () => {\n  let component: ImageGalleryComponent;\n  let fixture: ComponentFixture<ImageGalleryComponent>;\n\n  beforeEach(async () => {\n    await TestBed.configureTestingModule({\n      imports: [ImageGalleryComponent]\n    }).compileComponents();\n\n    fixture = TestBed.createComponent(ImageGalleryComponent);\n    component = fixture.componentInstance;\n    fixture.detectChanges();\n  });\n\n  it('should create', () => {\n    expect(component).toBeTruthy();\n  });\n\n  it('should load images on init', () => {\n    expect(component.images().length).toBeGreaterThan(0);\n  });\n\n  it('should filter out deleted images on init', () => {\n    const deletedImages = component.images().filter(img => img.borrado);\n    expect(deletedImages.length).toBe(0);\n  });\n\n  it('should render all images in the gallery', () => {\n    const imageItems = fixture.nativeElement.querySelectorAll('app-image-item');\n    expect(imageItems.length).toBe(component.images().length);\n  });\n\n  it('should delete image when onDeleteImage is called', () => {\n    const initialLength = component.images().length;\n    const firstImageId = component.images()[0].id;\n    component.onDeleteImage(firstImageId);\n    expect(component.images().length).toBe(initialLength - 1);\n  });\n\n  it('should remove the correct image from the array', () => {\n    const imageToDelete = component.images()[1];\n    const imageToDeleteId = imageToDelete.id;\n    component.onDeleteImage(imageToDeleteId);\n    const foundImage = component.images().find(img => img.id === imageToDeleteId);\n    expect(foundImage).toBeUndefined();\n  });\n\n  it('should use immutable update when deleting', () => {\n    const originalArray = component.images();\n    const firstImageId = component.images()[0].id;\n    component.onDeleteImage(firstImageId);\n    const newArray = component.images();\n    expect(originalArray === newArray).toBe(false);\n  });\n\n  it('should mark first image as highlighted', () => {\n    fixture.detectChanges();\n    const imageItems = fixture.nativeElement.querySelectorAll('app-image-item');\n    // First image should have destacada=true\n    expect(imageItems[0]).toBeTruthy();\n  });\n\n  it('should handle deleting the first image correctly', () => {\n    const initialLength = component.images().length;\n    const firstImageId = component.images()[0].id;\n    component.onDeleteImage(firstImageId);\n    expect(component.images().length).toBe(initialLength - 1);\n    expect(component.images()[0].id).not.toBe(firstImageId);\n  });\n\n  it('should emit deleteImage output to parent component', () => {\n    spyOn(component.images, 'update').and.callThrough();\n    component.onDeleteImage(1);\n    expect(component.images.update).toHaveBeenCalled();\n  });\n\n  it('should continue working after multiple deletions', () => {\n    const initialLength = component.images().length;\n    component.onDeleteImage(component.images()[0].id);\n    component.onDeleteImage(component.images()[0].id);\n    expect(component.images().length).toBe(initialLength - 2);\n  });\n});\n
+import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { ImageGalleryComponent } from './image-gallery.component';
+
+describe('ImageGalleryComponent', () => {
+  let component: ImageGalleryComponent;
+  let fixture: ComponentFixture<ImageGalleryComponent>;
+
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({
+      imports: [ImageGalleryComponent]
+    }).compileComponents();
+
+    fixture = TestBed.createComponent(ImageGalleryComponent);
+    component = fixture.componentInstance;
+    fixture.detectChanges();
+  });
+
+  it('debería crearse', () => {
+    expect(component).toBeTruthy();
+  });
+
+  it('debería cargar las imágenes al iniciar', () => {
+    expect(component.images().length).toBeGreaterThan(0);
+  });
+
+  it('debería filtrar las imágenes borradas al iniciar', () => {
+    const deletedImages = component.images().filter(img => img.borrado);
+    expect(deletedImages.length).toBe(0);
+  });
+
+  it('debería renderizar todas las imágenes de la galería', () => {
+    const imageItems = fixture.nativeElement.querySelectorAll('app-image-item');
+    expect(imageItems.length).toBe(component.images().length);
+  });
+
+  it('debería eliminar la imagen del array al llamar onDeleteImage', () => {
+    const initialLength = component.images().length;
+    const firstImageId = component.images()[0].id;
+
+    component.onDeleteImage(firstImageId);
+
+    expect(component.images().length).toBe(initialLength - 1);
+    expect(component.images().find(img => img.id === firstImageId)).toBeUndefined();
+  });
+
+  it('debería actualizar el array de forma inmutable al eliminar', () => {
+    const originalArray = component.images();
+    const firstImageId = component.images()[0].id;
+
+    component.onDeleteImage(firstImageId);
+
+    expect(component.images() === originalArray).toBe(false);
+  });
+
+  it('debería seguir funcionando después de varias eliminaciones', () => {
+    const initialLength = component.images().length;
+
+    component.onDeleteImage(component.images()[0].id);
+    component.onDeleteImage(component.images()[0].id);
+
+    expect(component.images().length).toBe(initialLength - 2);
+  });
+});

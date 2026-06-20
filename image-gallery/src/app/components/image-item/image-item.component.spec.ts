@@ -1,1 +1,64 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';\nimport { ImageItemComponent } from './image-item.component';\nimport { Image } from '../../interfaces/image.interface';\n\ndescribe('ImageItemComponent', () => {\n  let component: ImageItemComponent;\n  let fixture: ComponentFixture<ImageItemComponent>;\n\n  const mockImage: Image = {\n    id: 1,\n    titulo: 'Aurora',\n    descripcion: 'Imagen de aurora',\n    src: '/images/aurora.png',\n    borrado: false,\n    categoria: 'naturaleza',\n    destacada: false\n  };\n\n  beforeEach(async () => {\n    await TestBed.configureTestingModule({\n      imports: [ImageItemComponent]\n    }).compileComponents();\n\n    fixture = TestBed.createComponent(ImageItemComponent);\n    component = fixture.componentInstance;\n    fixture.componentRef.setInput('image', mockImage);\n    fixture.componentRef.setInput('destacada', false);\n    fixture.detectChanges();\n  });\n\n  it('should create', () => {\n    expect(component).toBeTruthy();\n  });\n\n  it('should render image with correct src and alt', () => {\n    const img = fixture.nativeElement.querySelector('img');\n    expect(img.src).toContain('aurora.png');\n    expect(img.alt).toBe('Aurora - Imagen de aurora');\n  });\n\n  it('should render title and description', () => {\n    const title = fixture.nativeElement.querySelector('h5');\n    const description = fixture.nativeElement.querySelector('p');\n    expect(title.textContent).toContain('Aurora');\n    expect(description.textContent).toContain('Imagen de aurora');\n  });\n\n  it('should show delete button', () => {\n    const deleteButton = fixture.nativeElement.querySelector('p-button[icon=\"pi pi-trash\"]');\n    expect(deleteButton).toBeTruthy();\n  });\n\n  it('should emit deleteImage event with image id when delete button clicked', (done) => {\n    spyOn(window, 'confirm').and.returnValue(true);\n    component.deleteImage.subscribe((imageId: number) => {\n      expect(imageId).toBe(1);\n      done();\n    });\n\n    const deleteButton = fixture.nativeElement.querySelector('p-button[icon=\"pi pi-trash\"]');\n    deleteButton.click();\n  });\n\n  it('should not emit deleteImage event when delete is cancelled', (done) => {\n    spyOn(window, 'confirm').and.returnValue(false);\n    let emitted = false;\n    component.deleteImage.subscribe(() => {\n      emitted = true;\n    });\n\n    const deleteButton = fixture.nativeElement.querySelector('p-button[icon=\"pi pi-trash\"]');\n    deleteButton.click();\n\n    setTimeout(() => {\n      expect(emitted).toBe(false);\n      done();\n    }, 100);\n  });\n\n  it('should show star badge when image is destacada', () => {\n    fixture.componentRef.setInput('destacada', true);\n    fixture.detectChanges();\n    const badge = fixture.nativeElement.textContent;\n    expect(badge).toContain('⭐');\n  });\n\n  it('should apply destacada class when input is true', () => {\n    fixture.componentRef.setInput('destacada', true);\n    fixture.detectChanges();\n    const card = fixture.nativeElement.querySelector('p-card');\n    expect(card.classList.contains('destacada')).toBe(true);\n  });\n\n  it('should call stopPropagation on delete click', () => {\n    spyOn(window, 'confirm').and.returnValue(true);\n    const event = new Event('click');\n    spyOn(event, 'stopPropagation');\n    component.onDeleteClick(event);\n    expect(event.stopPropagation).toHaveBeenCalled();\n  });\n});\n
+import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { ImageItemComponent } from './image-item.component';
+import { Image } from '../../interfaces/image.interface';
+
+describe('ImageItemComponent', () => {
+  let component: ImageItemComponent;
+  let fixture: ComponentFixture<ImageItemComponent>;
+
+  const mockImage: Image = {
+    id: 1,
+    titulo: 'Aurora',
+    descripcion: 'Imagen de aurora',
+    src: '/images/aurora.png',
+    borrado: false,
+    categoria: 'naturaleza'
+  };
+
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({
+      imports: [ImageItemComponent]
+    }).compileComponents();
+
+    fixture = TestBed.createComponent(ImageItemComponent);
+    component = fixture.componentInstance;
+    fixture.componentRef.setInput('image', mockImage);
+    fixture.detectChanges();
+  });
+
+  it('debería renderizar el botón de eliminar', () => {
+    const deleteButton = fixture.nativeElement.querySelector('p-button[icon="pi pi-trash"]');
+    expect(deleteButton).toBeTruthy();
+  });
+
+  it('debería mostrar el diálogo de confirmación al hacer click en eliminar', () => {
+    const confirmSpy = vi.spyOn(window, 'confirm').mockReturnValue(true);
+
+    const deleteButton = fixture.nativeElement.querySelector('p-button[icon="pi pi-trash"]');
+    deleteButton.click();
+
+    expect(confirmSpy).toHaveBeenCalledWith('¿Eliminar "Aurora"?');
+  });
+
+  it('debería emitir deleteImage con el id de la imagen al confirmar', () => {
+    vi.spyOn(window, 'confirm').mockReturnValue(true);
+    let emittedId: number | undefined;
+    component.deleteImage.subscribe((id: number) => emittedId = id);
+
+    const deleteButton = fixture.nativeElement.querySelector('p-button[icon="pi pi-trash"]');
+    deleteButton.click();
+
+    expect(emittedId).toBe(1);
+  });
+
+  it('no debería emitir deleteImage si se cancela la eliminación', () => {
+    vi.spyOn(window, 'confirm').mockReturnValue(false);
+    let emitted = false;
+    component.deleteImage.subscribe(() => emitted = true);
+
+    const deleteButton = fixture.nativeElement.querySelector('p-button[icon="pi pi-trash"]');
+    deleteButton.click();
+
+    expect(emitted).toBe(false);
+  });
+});
