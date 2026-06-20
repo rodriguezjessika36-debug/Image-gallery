@@ -103,4 +103,63 @@ describe('ImageGalleryComponent', () => {
     component.onToggleSelect(component.images()[0].id);
     expect(component.selectedIds() === originalSet).toBe(false);
   });
+
+  it('no debería mostrar la barra de borrado batch cuando no hay imágenes seleccionadas', () => {
+    const batchBar = fixture.nativeElement.querySelector('.batch-bar');
+    expect(batchBar).toBeFalsy();
+  });
+
+  it('debería mostrar la barra de borrado batch cuando hay al menos una imagen seleccionada', () => {
+    // Arrange
+    component.onToggleSelect(component.images()[0].id);
+
+    // Act
+    fixture.detectChanges();
+
+    // Assert
+    const batchBar = fixture.nativeElement.querySelector('.batch-bar');
+    expect(batchBar).toBeTruthy();
+  });
+
+  it('debería eliminar las imágenes seleccionadas al confirmar el borrado batch', () => {
+    // Arrange
+    vi.spyOn(window, 'confirm').mockReturnValue(true);
+    const [first, second] = component.images();
+    const initialLength = component.images().length;
+    component.onToggleSelect(first.id);
+    component.onToggleSelect(second.id);
+
+    // Act
+    component.onDeleteSelected();
+
+    // Assert
+    expect(component.images().length).toBe(initialLength - 2);
+    expect(component.images().find(img => img.id === first.id)).toBeUndefined();
+    expect(component.images().find(img => img.id === second.id)).toBeUndefined();
+  });
+
+  it('no debería eliminar nada si se cancela el borrado batch', () => {
+    // Arrange
+    vi.spyOn(window, 'confirm').mockReturnValue(false);
+    const initialLength = component.images().length;
+    component.onToggleSelect(component.images()[0].id);
+
+    // Act
+    component.onDeleteSelected();
+
+    // Assert
+    expect(component.images().length).toBe(initialLength);
+  });
+
+  it('debería limpiar el set de seleccionados después de eliminar el batch', () => {
+    // Arrange
+    vi.spyOn(window, 'confirm').mockReturnValue(true);
+    component.onToggleSelect(component.images()[0].id);
+
+    // Act
+    component.onDeleteSelected();
+
+    // Assert
+    expect(component.selectedIds().size).toBe(0);
+  });
 });
