@@ -1,59 +1,58 @@
-# ImageGallery
+# Galería de Imágenes
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 21.2.12.
+App de galería hecha con Angular 21 (standalone components + signals). Permite ver imágenes en grid, eliminarlas (una por una o en masa), seleccionarlas y reordenarlas con drag and drop.
 
-## Development server
+## Instalación
 
-To start a local development server, run:
+```bash
+npm install
+```
+
+## Levantar el proyecto
 
 ```bash
 ng serve
 ```
 
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
+Abrir `http://localhost:4200/`.
 
-## Code scaffolding
-
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
+## Tests
 
 ```bash
-ng generate component component-name
+ng test --no-watch
 ```
 
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
+Con cobertura:
 
 ```bash
-ng generate --help
+ng test --no-watch --coverage
 ```
 
-## Building
+## Lint
 
-To build the project run:
+```bash
+ng lint
+```
+
+## Build de producción
 
 ```bash
 ng build
 ```
 
-This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
+Los archivos quedan en `dist/`.
 
-## Running unit tests
+## Estructura
 
-To execute unit tests with the [Vitest](https://vitest.dev/) test runner, use the following command:
-
-```bash
-ng test
+```
+src/app/
+  components/
+    image-gallery/   estado y lógica (signals, drag&drop, selección)
+    image-item/       presentación de cada imagen, emite eventos al padre
+  interfaces/
+    image.interface.ts
 ```
 
-## Running end-to-end tests
+## Stack
 
-For end-to-end (e2e) testing, run:
-
-```bash
-ng e2e
-```
-
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
-
-## Additional Resources
-
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+Angular 21, PrimeNG, Angular CDK (drag and drop), Tailwind, Vitest.
