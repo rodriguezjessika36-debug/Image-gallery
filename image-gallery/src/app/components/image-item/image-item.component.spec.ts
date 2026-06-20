@@ -103,4 +103,35 @@ describe('ImageItemComponent', () => {
     // Assert
     expect(event.stopPropagation).toHaveBeenCalled();
   });
+
+  it('debería manejar un título vacío sin lanzar errores', () => {
+    // Arrange
+    const edgeImage: Image = { ...mockImage, titulo: '' };
+    fixture.componentRef.setInput('image', edgeImage);
+    fixture.detectChanges();
+    const confirmSpy = vi.spyOn(window, 'confirm').mockReturnValue(true);
+    const deleteButton = fixture.nativeElement.querySelector('p-button[icon="pi pi-trash"]');
+
+    // Act
+    const clickAndDelete = () => deleteButton.click();
+
+    // Assert
+    expect(clickAndDelete).not.toThrow();
+    expect(confirmSpy).toHaveBeenCalledWith('¿Eliminar ""?');
+  });
+
+  it('debería emitir un evento por cada click confirmado en clicks rápidos sucesivos', () => {
+    // Arrange: el componente no tiene debounce ni guarda de "ya se está eliminando"
+    vi.spyOn(window, 'confirm').mockReturnValue(true);
+    const emittedIds: number[] = [];
+    component.deleteImage.subscribe((id: number) => emittedIds.push(id));
+    const deleteButton = fixture.nativeElement.querySelector('p-button[icon="pi pi-trash"]');
+
+    // Act
+    deleteButton.click();
+    deleteButton.click();
+
+    // Assert
+    expect(emittedIds).toEqual([1, 1]);
+  });
 });
