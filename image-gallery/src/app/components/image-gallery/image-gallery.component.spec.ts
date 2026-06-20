@@ -1,5 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { ImageGalleryComponent } from './image-gallery.component';
+import { CdkDragDrop } from '@angular/cdk/drag-drop';
+import { Image } from '../../interfaces/image.interface';
 
 describe('ImageGalleryComponent', () => {
   let component: ImageGalleryComponent;
@@ -161,5 +163,33 @@ describe('ImageGalleryComponent', () => {
 
     // Assert
     expect(component.selectedIds().size).toBe(0);
+  });
+
+  it('debería reordenar el array al soltar un drag', () => {
+    // Arrange
+    const imagesBeforeDrop = component.images();
+    const draggedImage = imagesBeforeDrop[0];
+    const dropEvent = { previousIndex: 0, currentIndex: 2 } as CdkDragDrop<Image[]>;
+
+    // Act
+    component.onDrop(dropEvent);
+
+    // Assert
+    expect(component.images()[2]).toEqual(draggedImage);
+    expect(component.images().length).toBe(imagesBeforeDrop.length);
+  });
+
+  it('debería marcar como destacada a la imagen que queda primera tras reordenar', () => {
+    // Arrange
+    const dropEvent = { previousIndex: 0, currentIndex: 2 } as CdkDragDrop<Image[]>;
+
+    // Act
+    component.onDrop(dropEvent);
+    fixture.detectChanges();
+
+    // Assert
+    const imageItems = fixture.nativeElement.querySelectorAll('app-image-item');
+    expect(imageItems[0].textContent).toContain('⭐');
+    expect(imageItems[1].textContent).not.toContain('⭐');
   });
 });
