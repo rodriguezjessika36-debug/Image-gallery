@@ -61,4 +61,46 @@ describe('ImageItemComponent', () => {
 
     expect(emitted).toBe(false);
   });
+
+  it('debería emitir toggleSelect con el id de la imagen al hacer click en el checkbox', () => {
+    // Arrange
+    let emittedId: number | undefined;
+    component.toggleSelect.subscribe((id: number) => emittedId = id);
+    const checkbox = fixture.nativeElement.querySelector('input[type="checkbox"]');
+
+    // Act
+    checkbox.click();
+
+    // Assert
+    expect(emittedId).toBe(1);
+  });
+
+  it('debería aplicar la clase selected cuando el input selected es true', () => {
+    // Arrange
+    fixture.componentRef.setInput('selected', true);
+
+    // Act
+    fixture.detectChanges();
+
+    // Assert
+    const card = fixture.nativeElement.querySelector('p-card');
+    expect(card.classList.contains('selected')).toBe(true);
+  });
+
+  it('no debería tener la clase selected cuando el input selected es false', () => {
+    const card = fixture.nativeElement.querySelector('p-card');
+    expect(card.classList.contains('selected')).toBe(false);
+  });
+
+  it('debería llamar stopPropagation al hacer click en el checkbox de selección', () => {
+    // Arrange
+    const event = new Event('click');
+    vi.spyOn(event, 'stopPropagation');
+
+    // Act
+    component.onToggleSelect(event);
+
+    // Assert
+    expect(event.stopPropagation).toHaveBeenCalled();
+  });
 });

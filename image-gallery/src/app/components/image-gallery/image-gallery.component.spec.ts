@@ -60,4 +60,47 @@ describe('ImageGalleryComponent', () => {
 
     expect(component.images().length).toBe(initialLength - 2);
   });
+
+  it('debería agregar el id al set de seleccionados al togglear una imagen no seleccionada', () => {
+    // Arrange
+    const imageId = component.images()[0].id;
+
+    // Act
+    component.onToggleSelect(imageId);
+
+    // Assert
+    expect(component.selectedIds().has(imageId)).toBe(true);
+  });
+
+  it('debería quitar el id del set de seleccionados al togglear una imagen ya seleccionada', () => {
+    // Arrange
+    const imageId = component.images()[0].id;
+    component.onToggleSelect(imageId);
+
+    // Act
+    component.onToggleSelect(imageId);
+
+    // Assert
+    expect(component.selectedIds().has(imageId)).toBe(false);
+  });
+
+  it('debería permitir seleccionar varias imágenes a la vez', () => {
+    // Arrange
+    const [first, second] = component.images();
+
+    // Act
+    component.onToggleSelect(first.id);
+    component.onToggleSelect(second.id);
+
+    // Assert
+    expect(component.selectedIds().size).toBe(2);
+    expect(component.selectedIds().has(first.id)).toBe(true);
+    expect(component.selectedIds().has(second.id)).toBe(true);
+  });
+
+  it('debería actualizar el set de selección de forma inmutable', () => {
+    const originalSet = component.selectedIds();
+    component.onToggleSelect(component.images()[0].id);
+    expect(component.selectedIds() === originalSet).toBe(false);
+  });
 });
